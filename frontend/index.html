@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vidéo</title>
+</head>
+<body>
+    <h1>Mes vidéos Youtube</h1>
+    <div id="youtube"></div>
+
+    <script>
+        // Effectuer une requête fetch vers le backend (http://localhost:8081/)
+        fetch('http://localhost:8081/')
+            .then(response => response.json()) // Convertir la réponse en JSON
+            .then(data => {
+                // Récupérer l'élément div pour afficher les vidéos
+                var youtubeDiv = document.getElementById('youtube');
+
+                // Parcourir chaque élément (vidéo) dans les résultats de la recherche
+                data.items.forEach(function (item) {
+                    // Récupérer l'identifiant de la vidéo, le titre et l'URL de la miniature
+                    var videoId = item.id.videoId;
+                    var videoTitle = item.snippet.title;
+                    var videoThumbnail = item.snippet.thumbnails.default.url;
+
+                    // Créer un nouvel élément div pour chaque vidéo
+                    var videoElement = document.createElement('div');
+                    videoElement.innerHTML = '<p>Video ID: ' + videoId + '</p>' +
+                                             '<p>Video Title: ' + videoTitle + '</p>' +
+                                             '<img src="' + videoThumbnail + '" alt="Video Thumbnail">';
+
+                    // Ajouter l'élément à la div principale
+                    youtubeDiv.appendChild(videoElement);
+                });
+            })
+            .catch(error => console.error('Erreur:', error)); // Gérer les erreurs en cas de problème avec la requête
+    </script>
+</body>
+</html>
